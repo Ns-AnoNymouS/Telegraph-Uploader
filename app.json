@@ -1,0 +1,42 @@
+{
+  "name": "Trimmer Bo",
+  "description": "The Telegram bot that can trim videos.",
+  "logo": "https://telegra.ph/file/8dd1b1ea055925a6a4848.jpg",
+  "keywords": [
+    "telegram",
+    "best",
+    "Telegraph",
+    "bot",
+    "uploader"
+  ],
+  "repository": "https://github.com/Ns-AnoNymouS/Telegraph-Uploader",
+  "env": {
+    "WEBHOOK": {
+      "description": "Setting this to ANYTHING will enable webhooks when in env mode",
+      "value": "ANYTHING"
+    },
+    "BOT_TOKEN": {
+      "description": "Your bot token, as a string.",
+      "value": ""
+    },
+    "API_ID": {
+      "description": "Get this value from https://my.telegram.org",
+      "value": ""
+    },
+    "API_HASH": {
+      "description": "Get this value from https://my.telegram.org",
+      "value": ""
+    }
+  },
+  "addons": [
+  ],
+  "buildpacks": [{
+    "url": "heroku/python"
+  }],
+  "formation": {
+    "worker": {
+      "quantity": 1,
+      "size": "free"
+    }
+  }
+}
