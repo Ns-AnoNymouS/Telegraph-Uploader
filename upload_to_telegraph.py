@@ -38,7 +38,7 @@ async def start_handlers(c, m):
     )
 
 
-@telegraphbot.on_message(filters.photo|filters.sticker)
+@telegraphbot.on_message(filters.photo & filters.incoming)
 async def telegraph(c, m):
     """Uploading to photo to telegra.ph 
        and sending photo link to user"""
