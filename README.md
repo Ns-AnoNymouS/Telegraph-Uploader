@@ -33,7 +33,8 @@ send any photo to the bot it will send you direct link<br>
 
 send any text to the bot it will generate instant view links.<br>
 
-For creating a post in telegra.ph send any text (for adding the title speperate the content and title with '|' ie:- `content|title`
+For creating a post in telegra.ph send any text (for adding the title speperate the content and title with '|' 
+**ie:** `content|title`
 
 ### Made with 🛠
 <p align="left"><img src="https://telegra.ph/file/3c66b18c5b7829b8c70b7.jpg" width="200">
