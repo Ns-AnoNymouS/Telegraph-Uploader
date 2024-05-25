@@ -32,6 +32,7 @@ Usage:
     to create a Telegra.ph post.
 """
 
+import os
 import re
 import time
 import logging
@@ -144,6 +145,10 @@ async def photo_handler(_: Bot, message: Message) -> None:
         media_upload = upload_file(file)
         telegraph_link = f"https://telegra.ph{media_upload[0]}"
         await msg.edit(telegraph_link)
+        os.remove(file)
+        os.rmdir(location)
+    except FileNotFoundError:
+        pass
     except Exception as e:  # pylint: disable=broad-exception-caught
         logger.error(e)
         await msg.edit(f"**Error:**\n{e}")
