@@ -1,20 +1,16 @@
 {
   "name": "Telegraph-Uploader",
-  "description": "The Telegram bot that can trim videos.",
+  "description": "Telegraph-Uploader is a Telegram bot that facilitates the upload of photos to Telegra.ph and generates instant view links for Telegram text messages.",
   "logo": "https://telegra.ph/file/8dd1b1ea055925a6a4848.jpg",
   "keywords": [
     "telegram",
-    "best",
+    "Python",
     "Telegraph",
     "bot",
     "uploader"
   ],
   "repository": "https://github.com/Ns-AnoNymouS/Telegraph-Uploader",
   "env": {
-    "WEBHOOK": {
-      "description": "Setting this to ANYTHING will enable webhooks when in env mode",
-      "value": "ANYTHING"
-    },
     "BOT_TOKEN": {
       "description": "Your bot token, as a string.",
       "value": ""
@@ -28,15 +24,15 @@
       "value": ""
     }
   },
-  "addons": [
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
   ],
-  "buildpacks": [{
-    "url": "heroku/python"
-  }],
   "formation": {
     "worker": {
       "quantity": 1,
-      "size": "free"
+      "size": "Eco"
     }
   }
 }

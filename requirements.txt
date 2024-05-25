@@ -1,3 +1,5 @@
-tgcrypto
-telegraph
-pyrogram
+telegraph==2.2.0
+pyrogram==2.0.106
+python-dotenv==1.0.1
+tgcrypto==1.2.5; sys_platform == 'linux'
+uvloop==0.19.0 ; sys_platform == 'linux'

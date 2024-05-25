@@ -1,61 +1,92 @@
 # Telegraph-Uploader 📤
 
 [![Open Source? Yes!](https://badgen.net/badge/Open%20Source%20%3F/Yes%21/blue?icon=github)](https://github.com/Ns-AnoNymouS/Telegraph-Uploader)
-[![Ask Me Anything !](https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg)](https://telegram.dog/Ns_AnoNymouS)
+[![Ask Me Anything!](https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg)](https://telegram.dog/Ns_AnoNymouS)
 
-- This is a telegram to Telegraph uploader
+Telegraph-Uploader is a Telegram bot that facilitates the upload of photos to Telegra.ph and generates instant view links for Telegram text messages.
 
-- This can generate instant view links for telegram text. 🔗
+## Features
 
-- This bot can upload photos to telegra.ph and give you the link.🏞
+- **Instant View Links**: Generate instant view links for Telegram text messages. 🔗
+- **Photo Uploads**: Upload photos to Telegra.ph and receive a direct link. 🏞
 
-### Our Channels 🧾
-[<p align="left"><img src="https://telegra.ph/file/7156f0a83260d2873e8ba.jpg" width="100">](https://telegram.dog/Ns_bot_updates)
-
-
-### Easy Way to Deploy
+## Easy Deployment
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/Ns-AnoNymouS/Telegraph-Uploader)
 
-- Get your API HASH & API TOKEN from [my.telegram.org](https://my.telegram.org/auth?to=apps) or [UseTGSBot](https://telegram.dog/UseTGSBot)
+1. Obtain your API HASH & API TOKEN from [my.telegram.org](https://my.telegram.org/auth?to=apps)
+2. Paste them into their respective fields.
+3. Get the bot token from [@BotFather](https://t.me/BotFather).
 
-- Paste then in there respective places. 
+## How to Run Locally
 
-- Get the bot token from [@BotFather](https://t.me/BotFather)
+1. Clone the repository:
+    ```sh
+    git clone https://github.com/Ns-AnoNymouS/Telegraph-Uploader.git
+    cd Telegraph-Uploader
+    ```
+2. Create virtual environment
+    ```sh
+    python3 -m venv .venv
+    
+    # for windows
+    .venv\Scripts\activate
+    
+    # for Linux or MacOS
+    source .venv/bin/activate
+    ```
 
-### Available Commands 👨‍✈️
+
+3. Install the required libraries:
+    ```sh
+    pip install -r requirements.txt
+    ```
+
+4. Add your configuration details to `.env`.
+    ```python
+    API_HASH = "your_api_hash"
+    API_ID = "your_api_id"
+    BOT_TOKEN = "your_bot_token"
+    ```
+
+5. Run the bot:
+    ```sh
+    python main.py
+    ```
+
+## Commands 👨‍✈️
+
 ``` 
-start - check whether bot alive or not and also know how to use
+/start - Check the bot's status and receive instructions on how to use its features.
 ```
 
-### How to Use 🤔
-send any photo to the bot it will send you direct link<br>
+## Usage 🤔
 
-send any text to the bot it will generate instant view links.<br>
+- **Photo Upload**: Send any photo to the bot, and it will return a direct link.
+- **Text to Instant View**: Send any text to the bot to generate instant view links.
+- **Custom Title**: To use custom title for your post on Telegra.ph, send a text message in the following format:
+```
+Title: {title}
+{content}
+```
+## Made with 🛠
 
-For creating a post in telegra.ph send any text (for adding the title speperate the content and title with '|' 
-**ie:** `content|title`
+[Python](https://docs.python.org/)
 
-### Made with 🛠
-<p align="left"><img src="https://telegra.ph/file/3c66b18c5b7829b8c70b7.jpg" width="200">
+## Framework 🧰
 
-
-### Framework 🧰
-[<p align="left"><img src="https://telegra.ph/file/0590c398350a15238b9eb.png" width="200">](https://docs.pyrogram.org/)
-
+[Pyrogram](https://docs.pyrogram.org/)
 
 ## Developer 👨🏻‍💻
 
-[<p align="center">
-<img src="https://telegra.ph/file/661f584f5aecc25011d9b.jpg" width="300">](https://telegram.dog/Ns_AnoNymouS)
+[<img src="https://avatars.githubusercontent.com/u/70622189?v=4" width="100" style="border-radius: 50%" alt="Developer Image">](https://github.com/Ns-AnoNymouS)
 
-**NAME:** 𝐀𝐧𝐨𝐧𝐲𝐦𝐨𝐮𝐬 <br>
+**Name**: Anonymous
 
-**Github:** [Ns-AnoNymouS](https://github.com/Ns-AnoNymouS) <br>
+**GitHub**: [Ns-AnoNymouS](https://github.com/Ns-AnoNymouS)
 
-**Language:** Python 🐍 <br>
+**Telegram**: [NS AnoNymouS](https://telegram.dog/The_proGrammerr)
 
-**Available**[<p align="center">
-<img src="https://telegra.ph/file/efdbb8c16474228e2c8de.jpg" width="50">](https://telegram.dog/Ns_AnoNymouS)
+## Contributions
 
-
+Contributions are welcome.
