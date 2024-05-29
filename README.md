@@ -39,7 +39,7 @@ Telegraph-Uploader is a Telegram bot that facilitates the upload of photos to Te
 
 3. Install the required libraries:
     ```sh
-    pip install -r requirements.txt
+    pip3 install -r requirements.txt
     ```
 
 4. Add your configuration details to `.env`.
@@ -51,7 +51,7 @@ Telegraph-Uploader is a Telegram bot that facilitates the upload of photos to Te
 
 5. Run the bot:
     ```sh
-    python main.py
+    python3 main.py
     ```
 
 ## Commands 👨‍✈️
