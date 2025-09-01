@@ -1,22 +1,22 @@
 """
 Telegraph Uploader Bot
 
-This module defines a Telegram bot that can upload photos to Telegra.ph and 
+This module defines a Telegram bot that can upload photos to imgBB / envs.sh and
 create instant view links for text messages.
 The bot is built using the Pyrogram library and the Telegraph API.
 
 Features:
-- Upload photos to Telegra.ph and return the URL.
-- Create Telegra.ph posts from text messages, with support for custom titles and emoji removal.
+- Upload photos to imgBB / envs.sh and return the URL.
+- Create graph.org posts from text messages, with support for custom titles and emoji removal.
 
 Classes:
 - Bot: A subclass of Pyrogram's Client, representing the Telegram bot.
 
 Functions:
 - start_handlers: Handles the /start command to provide a welcome message.
-- photo_handler: Handles incoming photo messages, uploads them to Telegra.ph,
+- photo_handler: Handles incoming photo messages, uploads them to imgBB / envs.sh,
                  and sends the URL to the user.
-- text_handler: Handles incoming text messages, creates Telegra.ph posts, 
+- text_handler: Handles incoming text messages, creates graph.org posts,
                 and sends the URL to the user.
 
 Patterns:
@@ -25,36 +25,40 @@ Patterns:
 
 Usage:
 1. Send a /start command to receive a welcome message.
-2. Send a photo to upload it to Telegra.ph and get the link.
-3. Send a text message in the format 
+2. Send a photo to upload it to imgBB / envs.sh and get the link.
+3. Send a text message in the format
         Title: {title}
         {content}
     to create a Telegra.ph post.
 """
 
-import os
-import re
-import time
 import logging
 import logging.config
 
-from telegraph import upload_file, Telegraph
+# Get logging configurations
+logging.config.fileConfig("logging.conf")
+logging.getLogger().setLevel(logging.INFO)
+logging.getLogger("pyrogram").setLevel(logging.WARNING)
+logger = logging.getLogger(__name__)
+
+import os
+import re
+import time
+
+import requests
+from telegraph import Telegraph
 from pyrogram import Client, filters
-from pyrogram.types import Message
+from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
+
 from config import Config
 from utils import progress
 
 try:
-    import uvloop # https://docs.pyrogram.org/topics/speedups#uvloop
+    import uvloop  # https://docs.pyrogram.org/topics/speedups#uvloop
+
     uvloop.install()
 except ImportError:
     pass
-
-# Get logging configurations
-logging.config.fileConfig("logging.conf")
-logging.getLogger().setLevel(logging.ERROR)
-logging.getLogger("pyrogram").setLevel(logging.WARNING)
-logger = logging.getLogger(__name__)
 
 
 class Bot(Client):  # pylint: disable=too-many-ancestors
@@ -71,13 +75,15 @@ class Bot(Client):  # pylint: disable=too-many-ancestors
 
     async def start(self):
         """Starts the bot and prints the bot username."""
+        Config.validate()
         await super().start()
-        print(f"Bot Started at @{self.me.username}")
+        logger.info("Bot started successfully at @%s", self.me.username)
+        logger.debug("Full bot info: %s", self.me)
 
     async def stop(self, *args, **kwargs):
         """Stops the bot and prints a stop message."""
         await super().stop(*args, **kwargs)
-        print("Session Stopped...")
+        logger.info("Bot session stopped gracefully.")
 
 
 bot = Bot()
@@ -89,94 +95,213 @@ TITLE_PATTERN = re.compile(r"title:? (.*)", re.IGNORECASE)
 async def start_handlers(_: Bot, message: Message) -> None:
     """Handles the /start command to provide a welcome message to the user."""
 
+    logger.debug("Recieced /start command from user %s", message.from_user.first_name)
     await message.reply(
-        "Hello **Dear!**\n\n"
-        "👋 **Welcome to the Telegra.ph Uploader Bot!**\n\n"
-        "With this bot, you can:\n"
-        " • **Upload Photos**: Send me a photo, and "
-        "I'll upload it to Telegra.ph, providing you with a link.\n"
-        " • **Create Instant View Links**: Send me a text, and "
-        "I'll create an instant view link for it.\n\n"
-        "📌 **Usage**:\n"
-        "• Send a photo directly to upload it.\n"
-        "• Send a text message in the format mentioned below "
-        "to create a Telegra.ph post.\n\n"
-        "🔗 **About Telegra.ph**:\n"
-        "Telegra.ph is a minimalist publishing tool that allows "
-        "you to create richly formatted posts with photos, videos, and "
-        "all sorts of embedded content.\n\n"
-        "🌟 **Get Started**: Just send a photo or text message, and let me do the rest!\n\n"
-        "🛠 **Source Code**: "
-        "[Fork on GitHub](https://github.com/Ns-AnoNymouS/Telegraph-Uploader)\n\n"
-        "📝 **Custom Title**:\n"
-        "```txt\n"
-        "Title: {title}\n{content}```\n\n"
-        "📝 **Eample**:\n"
-        "```txt\n"
-        "Title: My First Telegraph Post\n"
-        "This is the content of my first Telegraph post!\n"
-        "I'm using the Telegra.ph Uploader Bot to publish this.\n\n"
-        "Here's a list of what I like:\n"
-        "- Programming 💻\n"
-        "- Reading 📚\n"
-        "- Traveling ✈️\n"
-        "- Music 🎵\n\n"
-        "You can create your own posts too. Just follow the format and enjoy!"
-        "```\n",
+        text=(
+            f"👋 **Hello {message.from_user.mention}!**\n\n"
+            "✨ Welcome to the **Telegraph Uploader Bot!**\n\n"
+            "With me, you can:\n"
+            "📸 **Upload Photos** → Send me any photo, and I'll upload it to **ImgBB** or **Envs.sh** with a direct shareable link.\n"
+            "📝 **Create Instant View Posts** → Send me text in a simple format, and I’ll create a stylish post on **Graph.org** (Telegraph alternative).\n\n"
+            "📌 **Usage**:\n"
+            "• Send a **photo** directly → Get ImgBB/Envs.sh link.\n"
+            "• Send a **text** in the following format → Get Graph.org post.\n\n"
+            "📝 **Custom Title**:\n"
+            "```txt\n"
+            "Title: {title}\n{content}\n"
+            "```\n\n"
+            "✅ **Example**:\n"
+            "```txt\n"
+            "Title: My First Graph.org Post\n"
+            "This is the content of my first post!\n\n"
+            "Here's a list of what I like:\n"
+            "- Programming 💻\n"
+            "- Reading 📚\n"
+            "- Traveling ✈️\n"
+            "- Music 🎵\n"
+            "```\n\n"
+            "🔗 **About Graph.org**:\n"
+            "Graph.org is a minimalist publishing tool (alternative to Telegra.ph, which is banned in India) that allows you to share beautifully formatted posts with text, images, and more.\n\n"
+            "🖼️ **About ImgBB & Envs.sh**:\n"
+            "- **ImgBB** → Permanent image hosting with fast sharing links.\n"
+            "- **Envs.sh** → Temporary hosting (⚠️ files may be deleted after 30 days).\n\n"
+            "🌟 **Get Started Now!** Just send a photo or formatted text message and let me handle the rest 🚀"
+        ),
         disable_web_page_preview=True,
+        reply_markup=InlineKeyboardMarkup(
+            [
+                [
+                    InlineKeyboardButton(
+                        "👨‍💻 My Creator", url="https://t.me/The_proGrammerr"
+                    ),
+                    InlineKeyboardButton(
+                        "🛠 Source Code",
+                        url="https://github.com/Ns-AnoNymouS/Telegraph-Uploader",
+                    ),
+                ],
+                [
+                    InlineKeyboardButton(
+                        "📌 Updates", url="https://t.me/NsBotsOfficial"
+                    ),
+                    InlineKeyboardButton("❤️ Support", url="https://t.me/amcDevSupport"),
+                ],
+            ]
+        ),
         quote=True,
     )
 
 
+def upload_file(file_path):
+    """
+    Uploads file to ImgBB (if API key is set).
+    Falls back to envs.sh if ImgBB fails or API key missing.
+    """
+    imgbb_key = getattr(Config, "IMGBB_API_KEY", None)
+    logger.debug("Attempting to upload file: %s", file_path)
+
+    # 1. Try ImgBB first (if key exists)
+    if imgbb_key:
+        logger.debug("ImgBB API key found. Uploading to ImgBB...")
+        try:
+            with open(file_path, "rb") as f:
+                files = {"image": f}
+                response = requests.post(
+                    "https://api.imgbb.com/1/upload",
+                    params={"key": imgbb_key},
+                    files=files,
+                    timeout=15,
+                )
+
+            if response.ok:
+                data = response.json()["data"]
+                return {
+                    "provider": "imgbb",
+                    "url": data["url"],
+                    "delete_url": data.get("delete_url"),
+                }
+            else:
+                logger.warning("ImgBB upload failed: %s", response.text)
+
+        except Exception as e:
+            logger.error("Error uploading to ImgBB: %s", e, exc_info=True)
+
+    # 2. Fallback: use envs.sh
+    logger.debug("Falling back to envs.sh upload...")
+    try:
+        with open(file_path, "rb") as f:
+            files = {"file": f}
+            response = requests.post("https://envs.sh", files=files, timeout=15)
+
+        if response.ok:
+            url = response.text.strip()
+            logger.info("File uploaded to envs.sh: %s", url)
+            return {"provider": "envs.sh", "url": url}
+        else:
+            logger.error("envs.sh upload failed: %s", response.text)
+
+    except Exception as e:
+        logger.critical("All upload methods failed: %s", e, exc_info=True)
+
+
 @bot.on_message(filters.photo & filters.incoming & filters.private)
 async def photo_handler(_: Bot, message: Message) -> None:
-    """
-    Handles incoming photo messages by uploading the photo to Telegra.ph
-    and sending the link to the user.
-    """
+    """Handles incoming photo messages by uploading them to cloud providers."""
 
     try:
+        logger.debug("Received photo from user_id=%s", message.from_user.id)
         msg = await message.reply_text("Processing....⏳", quote=True)
+
         location = f"./{message.from_user.id}{time.time()}/"
         start_time = time.time()
+        logger.debug("Downloading photo to %s", location)
+
         file = await message.download(
             location, progress=progress, progress_args=(msg, start_time)
         )
-        media_upload = upload_file(file)
-        telegraph_link = f"https://telegra.ph{media_upload[0]}"
-        await msg.edit(telegraph_link)
-        os.remove(file)
-        os.rmdir(location)
+        logger.info("Photo downloaded: %s", file)
+
+        await msg.edit(
+            "📥 **Download Complete!**\n\n"
+            "☁️ Now uploading your file to the **cloud provider**..."
+        )
+
+        media_data = upload_file(file)
+        if not media_data:
+            logger.warning("Upload failed for file: %s", file)
+            await msg.edit(
+                "⚠️ Oops! We couldn’t upload your media file.\nPlease try again in a while."
+            )
+            return
+
+        else:
+            buttons = [[InlineKeyboardButton("🌐 View Image", url=media_data["url"])]]
+
+            text = (
+                f"✅ **Upload Successful!**\n\n"
+                f"🖼️ [Click here to view the image]({media_data['url']})\n\n"
+                f"📡 **Provider:** `{media_data['provider']}`\n\n"
+                f"🔗 **Direct Link:** `{media_data['url']}`\n\n"
+            )
+
+            if media_data["provider"].lower() == "envs.sh":
+                text += (
+                    "\n⚠️ **Note:**\n\nFiles uploaded to **Envs.sh** may be automatically deleted "
+                    "after **30 days**. This is **not** a permanent storage option.\n\n"
+                )
+
+            if media_data.get("delete_url"):
+                buttons.append(
+                    [
+                        InlineKeyboardButton(
+                            "🗑️ Delete Image", url=media_data["delete_url"]
+                        )
+                    ]
+                )
+
+            await msg.edit(
+                text,
+                reply_markup=InlineKeyboardMarkup(buttons),
+                disable_web_page_preview=True,
+            )
+
     except FileNotFoundError:
         pass
     except Exception as e:  # pylint: disable=broad-exception-caught
         logger.error(e)
         await msg.edit(f"**Error:**\n{e}")
+    finally:
+        if os.path.exists(file):
+            os.remove(file)
+            os.rmdir(location)
 
 
 @bot.on_message(filters.text & filters.incoming & filters.private)
 async def text_handler(_: Bot, message: Message) -> None:
-    """
-    Handles incoming text messages
-    by creating a Telegra.ph post
-    and sending the link to the user.
-    """
+    """Handles text messages by creating Graph.org posts."""
 
     try:
+        logger.debug("Received text message from user_id=%s", message.from_user.id)
         msg = await message.reply_text("Processing....⏳", quote=True)
 
         short_name = "Ns Bots"
-        user = Telegraph().create_account(short_name=short_name)
+        logger.debug("Creating Telegraph account with short_name=%s", short_name)
+
+        user = Telegraph(domain=Config.DOMAIN).create_account(short_name=short_name)
         access_token = user.get("access_token")
+
+        logger.debug("Access token acquired for Telegraph API")
         content = message.text.html
         content = re.sub(EMOJI_PATTERN, "", content).replace("</emoji>", "")
 
         title = re.findall(TITLE_PATTERN, content)
         if len(title) != 0:
             title = title[0]
+            logger.debug("Custom title extracted: %s", title)
             content = "\n".join(content.splitlines()[1:])
         else:
             title = message.from_user.first_name
+            logger.debug("No custom title found. Using user name: %s", title)
+
         content = content.replace("\n", "<br>")
         author_url = (
             f"https://telegram.dog/{message.from_user.username}"
@@ -184,14 +309,16 @@ async def text_handler(_: Bot, message: Message) -> None:
             else None
         )
 
-        response = Telegraph(access_token=access_token).create_page(
+        response = Telegraph(
+            domain=Config.DOMAIN, access_token=access_token
+        ).create_page(
             title=title,
             html_content=content,
             author_name=str(message.from_user.first_name),
             author_url=author_url,
         )
         path = response["path"]
-        await msg.edit(f"https://telegra.ph/{path}")
+        await msg.edit(f"https://{Config.DOMAIN}/{path}")
     except ValueError as e:
         logger.error(e)
         await msg.edit("Unable to generate instant view link.")
