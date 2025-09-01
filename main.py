@@ -237,7 +237,7 @@ async def photo_handler(_: Bot, message: Message) -> None:
             buttons = [[InlineKeyboardButton("🌐 View Image", url=media_data["url"])]]
 
             text = (
-                f"✅ **Upload Successful!**\n\n"
+                f"[\u200B]({media_data['url']})✅ **Upload Successful!**\n\n"
                 f"🖼️ [Click here to view the image]({media_data['url']})\n\n"
                 f"📡 **Provider:** `{media_data['provider']}`\n\n"
                 f"🔗 **Direct Link:** `{media_data['url']}`\n\n"
@@ -261,7 +261,7 @@ async def photo_handler(_: Bot, message: Message) -> None:
             await msg.edit(
                 text,
                 reply_markup=InlineKeyboardMarkup(buttons),
-                disable_web_page_preview=True,
+                disable_web_page_preview=False,
             )
 
     except FileNotFoundError:
