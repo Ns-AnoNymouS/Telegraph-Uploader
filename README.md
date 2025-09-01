@@ -6,7 +6,6 @@
 **Telegraph-Uploader** is a **Telegram bot** that helps you upload **photos** and create **instant-view posts**.  
 Since **Telegra.ph is banned in India**, this bot uses **Graph.org** for posts and **ImgBB/Envs.sh** for image hosting.
 
----
 
 ## ✨ Features
 
@@ -15,7 +14,6 @@ Since **Telegra.ph is banned in India**, this bot uses **Graph.org** for posts a
 - 📝 **Custom Titles** → Add custom titles when creating Graph.org posts.
 - ⚡ **Fast & Lightweight** → Powered by [Pyrogram](https://docs.pyrogram.org/).
 
----
 
 ## 📷 Features & Examples
 
@@ -23,19 +21,16 @@ Since **Telegra.ph is banned in India**, this bot uses **Graph.org** for posts a
 
 <img src="screenshots/photo_upload.png" width="300">
 
----
 
 ### 📰 Graph.org Post
 
 <img src="screenshots/graph_post.png" width="300">
 
----
 
 ### 🤖 Bot Start Menu
 
 <img src="screenshots/start_menu.png" width="300">
 
----
 
 ## 🚀 Easy Deployment
 
@@ -45,7 +40,6 @@ Since **Telegra.ph is banned in India**, this bot uses **Graph.org** for posts a
 2. Get your **Bot Token** from [@BotFather](https://t.me/BotFather).
 3. (Optional but recommended) Get an **ImgBB API Key** from [ImgBB](https://api.imgbb.com/).
 
----
 
 ## 🖥️ Run Locally
 
@@ -91,7 +85,6 @@ Since **Telegra.ph is banned in India**, this bot uses **Graph.org** for posts a
    python3 main.py
    ```
 
----
 
 ## 📜 Commands
 
@@ -99,7 +92,6 @@ Since **Telegra.ph is banned in India**, this bot uses **Graph.org** for posts a
 /start - Check bot status & usage instructions
 ```
 
----
 
 ## 🤔 Usage
 
@@ -117,7 +109,6 @@ Since **Telegra.ph is banned in India**, this bot uses **Graph.org** for posts a
 
 - **Custom Titles** → Add a title for every post.
 
----
 
 ## 🛠 Built With
 
@@ -126,7 +117,6 @@ Since **Telegra.ph is banned in India**, this bot uses **Graph.org** for posts a
 - [Graph.org API](https://graph.org/api) ✨
 - [ImgBB API](https://api.imgbb.com/) 🖼️
 
----
 
 ## 👨🏻‍💻 Developer
 
@@ -136,14 +126,12 @@ Since **Telegra.ph is banned in India**, this bot uses **Graph.org** for posts a
 **GitHub**: [Ns-AnoNymouS](https://github.com/Ns-AnoNymouS)  
 **Telegram**: [NS AnoNymouS](https://telegram.dog/The_proGrammerr)
 
----
 
 ## 🤝 Contributions
 
 Contributions are always welcome! 🎉
 Fork the repo, create a branch, and submit a PR.
 
----
 
 ## ⚠️ Notes
 
@@ -151,4 +139,3 @@ Fork the repo, create a branch, and submit a PR.
 - 🗑️ **Envs.sh** → Temporary hosting (deleted after 30 days).
 - 🇮🇳 Since **Telegra.ph is banned in India**, this bot uses **Graph.org** instead.
 
----
